@@ -1,0 +1,2 @@
+# Keep models directory in version control.
+# Model weights (*.joblib, *.pkl) are git-ignored to prevent storing large binaries.

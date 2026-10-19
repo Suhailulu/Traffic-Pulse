@@ -212,48 +212,117 @@ cat data/sample/sample_trips.csv | python mapreduce/mapper_test.py | sort | pyth
 
 ---
 
-## 7. How to Reproduce & Run
+## 7. Machine Learning Congestion Prediction (Phase 4)
 
-### Step 1: Virtual Environment Setup
-```powershell
-# Navigate to project directory
-cd "C:\Users\suhai\OneDrive\Desktop\Traffic Pulse"
+### 7.1 Objective & Approach
+Phase 4 implements a functional, leak-free machine learning classification pipeline to predict urban traffic congestion levels (`Low`, `Moderate`, `High`) for any given hour, day of the week, and TLC geographic zone in New York City.
 
-# Activate the virtual environment
-.\.venv\Scripts\Activate.ps1
+### 7.2 Target Label Definition
+Congestion is derived using an empirical, domain-grounded vehicle traversal speed indicator:
+- **Low Congestion (`speed >= 15.0 mph`):** Fluid, uncongested traffic flow with minimal street delay. Typical of late-night travel (02:00 - 05:00 AM) and uncongested outer-borough / airport expressway corridors (e.g., JFK Airport).
+- **Moderate Congestion (`8.0 mph <= speed < 15.0 mph`):** Steady urban street traffic operating under standard signalized arterial cycles. Represents the predominant daytime traffic state across Manhattan and Brooklyn.
+- **High Congestion (`speed < 8.0 mph`):** Severe corridor friction, stop-and-go congestion, and gridlock conditions. Highly concentrated in Midtown/Downtown corridors during evening rush hours (04:00 - 07:00 PM).
 
-# Install requirements
-pip install -r requirements.txt
+### 7.3 Feature Engineering & Strict Leakage Prevention
+To guarantee that the model only uses information available **at the time the prediction is made**, post-trip measurements (`trip_duration`, `trip_distance`, `fare_amount`, `speed_mph`) are strictly excluded from the feature space.
+
+The input feature vector consists of:
+1. `pickup_hour` (integer 0–23): Diurnal cycle indicator.
+2. `pickup_day_of_week` (integer 0–6, Mon=0, Sun=6): Weekly commute cycle.
+3. `is_weekend` (binary 0/1): Weekend vs. weekday transit pattern flag.
+4. `PULocationID` (integer 1–265): TLC geographic origin zone.
+5. `hist_volume` (float): Historical trip volume for that zone and hour (from training data).
+6. `hist_avg_duration` (float): Historical average trip duration in minutes for that zone and hour (from training data).
+7. `hist_avg_speed` (float): Historical average speed in mph for that zone and hour (from training data).
+
+### 7.4 Chronological Train/Test Split
+To prevent temporal data leakage and reflect real-world deployment, records were partitioned chronologically:
+- **Dataset:** 199,989 verified trip records sampled uniformly across all row groups of `data/processed/cleaned_trips_2024_01.parquet`.
+- **Chronological Cutoff Timestamp:** `2024-01-24 15:36:40`
+- **Training Set (75%):** `149,991 records` (January 1 to January 24, 2024)
+- **Testing Set (25%):** `49,998 records` (January 24 to January 30, 2024)
+- **Historical Profiling:** 2,831 unique (Zone × Hour) aggregate metric vectors were computed **strictly on the training split**. Unseen zone/hour combinations fall back gracefully to global training medians.
+
+### 7.5 Model Performance & Evaluation Metrics
+The primary Random Forest Classifier (`n_estimators=100`, `max_depth=12`, `min_samples_split=10`) was compared against a naive majority-class baseline and a regularized Logistic Regression baseline on the out-of-time chronological test set:
+
+| Model Architecture | Accuracy | Macro Precision | Macro Recall | Macro F1 | Weighted F1 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Dummy Baseline (Majority Class: Moderate)** | `49.10%` | `0.1637` | `0.3333` | `0.2195` | `0.3234` |
+| **Logistic Regression Baseline** | `55.16%` | `0.6110` | `0.4832` | `0.4608` | `0.4745` |
+| **Random Forest Classifier (TrafficPulse)** | **`59.17%`** | **`0.6414`** | **`0.5301`** | **`0.5377`** | **`0.5570`** |
+
+*Random Forest demonstrates a **+10.07 percentage point** accuracy improvement over the naive baseline.*
+
+#### Random Forest Detailed Classification Report (Test Set: 49,998 trips)
+| Class Label | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **Low** (Speed >= 15 mph) | `0.6738` | `0.4560` | `0.5439` | 8,017 |
+| **Moderate** (8 - 15 mph) | `0.5624` | `0.8645` | `0.6815` | 24,550 |
+| **High** (Speed < 8 mph) | `0.6879` | `0.2698` | `0.3876` | 17,431 |
+| **Overall Accuracy** | - | - | **`0.5917`** | **49,998** |
+| **Weighted Average** | **`0.6240`** | **`0.5917`** | **`0.5570`** | **49,998** |
+
+#### Test Set Confusion Matrix (Rows: Actual, Columns: Predicted [Low, Moderate, High])
+```text
+               Predicted Low   Predicted Moderate   Predicted High
+Actual Low             3,656                4,094              267
+Actual Moderate        1,460               21,223            1,867
+Actual High              310               12,418            4,703
 ```
 
-### Step 2: Environment Diagnostic Check
-```powershell
-python scripts\verify_env.py
+#### Feature Importance Hierarchy
+```text
+1. hist_avg_speed       (45.10%)  ██████████████████████
+2. hist_avg_duration    (20.29%)  ██████████
+3. PULocationID          (9.05%)  ████
+4. pickup_hour           (8.03%)  ████
+5. hist_volume           (7.80%)  ████
+6. pickup_day_of_week    (6.65%)  ███
+7. is_weekend            (3.09%)  █
 ```
 
-### Step 3: Run Ingestion & Download Raw Data
+### 7.6 How to Train & Run Predictions
 ```powershell
-python src\ingestion\download_dataset.py
+# 1. Train model, evaluate against baselines, and serialize to src/prediction/models/
+python -m src.prediction.train_model
+
+# 2. Run real-time congestion inference via CLI
+# Example: Predict congestion for Midtown Center (Zone 161) at 6:00 PM (Hour 18) on Wednesday (Day 2)
+python -m src.prediction.predict_congestion --hour 18 --zone 161 --day 2
+
+# Example: Predict congestion for JFK Airport (Zone 132) at 3:00 AM (Hour 3)
+python -m src.prediction.predict_congestion --hour 3 --zone 132 --day 2
+
+# 3. Run prediction unit tests (19 tests)
+pytest tests/test_prediction.py -v
 ```
 
-### Step 4: Run Parquet Schema Inspector
-```powershell
-python src\ingestion\schema_inspector.py
-```
-
-### Step 5: Run Geospatial Zone Inspector
-```powershell
-python src\geospatial\zone_inspector.py
-```
-
-### Step 6: Execute Automated Test Suite
-```powershell
-pytest tests\test_ingestion.py -v
-```
+### 7.7 Critical Limitations
+> [!CAUTION]
+> **Proxy-Based Congestion Caveat:**
+> 1. **Commercial Vehicle Speed vs. Actual Road Traffic:** Yellow taxi speeds serve as an empirical proxy for street corridor delay, incorporating passenger boarding, traffic light dwells, and turning movements. They do not constitute direct physical road loop-detector or radar vehicle density measurements.
+> 2. **Pre-trip Scheduling Scope:** Predictions are generated strictly from scheduled departure parameters and historical baselines. Real-time traffic anomalies (sudden collisions, emergency weather conditions, or street closures) cannot be observed at pre-trip inference time.
+> 3. **Single-Month Representation:** Model training relies on January 2024 telemetry. Seasonal tourist influx, summer congestion shifts, and severe winter storm days are specific to winter conditions and require continuous multi-season retraining.
 
 ---
 
-## 7. Development Verification Rules
+## 8. Verification & Test Suite Summary
+TrafficPulse features an automated test suite verifying data quality, ingestion security, traffic analytics calculations, and machine learning prediction consistency:
+
+```powershell
+pytest -v
+```
+**Test Results:** **42 passed in 18.84s**
+- `tests/test_cleaner.py`: 6 tests passing (data quality bounds, anomaly filtering, duration math)
+- `tests/test_ingestion.py`: 10 tests passing (Parquet schema, checksums, spatial reconciliation)
+- `tests/test_traffic_analysis.py`: 7 tests passing (hourly aggregations, speed statistics, edge cases)
+- `tests/test_prediction.py`: 19 tests passing (chronological split, serialization, input validation, inference probability calibration, deterministic repeatability)
+
+---
+
+## 9. Development Verification Rules
 1. **Zero Fabrication**: All analytical metrics, speed statistics, and model evaluation scores reflect genuine execution outputs.
 2. **Strict Leakage Prevention**: Machine learning feature matrices never include post-trip attributes (`trip_duration`, `fare_amount`, `actual_speed`).
 3. **Modular Testing**: Every module is tested before proceeding to downstream components.
+

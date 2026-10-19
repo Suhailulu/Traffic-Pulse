@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-19T22:23:36.545203",
+    "train_samples": 149991,
+    "test_samples": 49998,
+    "feature_columns": [
+      "pickup_hour",
+      "pickup_day_of_week",
+      "is_weekend",
+      "PULocationID",
+      "hist_volume",
+      "hist_avg_duration",
+      "hist_avg_speed"
+    ],
+    "target_classes": [
+      "Low",
+      "Moderate",
+      "High"
+    ],
+    "training_duration_seconds": 1.73
+  },
+  "target_distribution": {
+    "train": {
+      "Moderate": 78530,
+      "High": 42486,
+      "Low": 28975
+    },
+    "test": {
+      "Moderate": 24550,
+      "High": 17431,
+      "Low": 8017
+    }
+  },
+  "baseline_dummy": {
+    "accuracy": 0.491,
+    "precision_macro": 0.1637,
+    "precision_weighted": 0.2411,
+    "recall_macro": 0.3333,
+    "recall_weighted": 0.491,
+    "f1_macro": 0.2195,
+    "f1_weighted": 0.3234,
+    "confusion_matrix": {
+      "labels": [
+        "Low",
+        "Moderate",
+        "High"
+      ],
+      "matrix": [
+        [
+          0,
+          8017,
+          0
+        ],
+        [
+          0,
+          24550,
+          0
+        ],
+        [
+          0,
+          17431,
+          0
+        ]
+      ]
+    }
+  },
+  "baseline_logistic_regression": {
+    "accuracy": 0.5516,
+    "precision_macro": 0.611,
+    "precision_weighted": 0.5804,
+    "recall_macro": 0.4832,
+    "recall_weighted": 0.5516,
+    "f1_macro": 0.4608,
+    "f1_weighted": 0.4745,
+    "confusion_matrix": {
+      "labels": [
+        "Low",
+        "Moderate",
+        "High"
+      ],
+      "matrix": [
+        [
+          3549,
+          4302,
+          166
+        ],
+        [
+          1209,
+          22337,
+          1004
+        ],
+        [
+          227,
+          15513,
+          1691
+        ]
+      ]
+    }
+  },
+  "random_forest": {
+    "accuracy": 0.5917,
+    "precision_macro": 0.6414,
+    "precision_weighted": 0.624,
+    "recall_macro": 0.5301,
+    "recall_weighted": 0.5917,
+    "f1_macro": 0.5377,
+    "f1_weighted": 0.557,
+    "confusion_matrix": {
+      "labels": [
+        "Low",
+        "Moderate",
+        "High"
+      ],
+      "matrix": [
+        [
+          3656,
+          4094,
+          267
+        ],
+        [
+          1460,
+          21223,
+          1867
+        ],
+        [
+          310,
+          12418,
+          4703
+        ]
+      ]
+    }
+  },
+  "random_forest_classification_report": {
+    "Low": {
+      "precision": 0.6737928492443789,
+      "recall": 0.45603093426468755,
+      "f1-score": 0.5439262069478539,
+      "support": 8017.0
+    },
+    "Moderate": {
+      "precision": 0.5624221544984762,
+      "recall": 0.8644806517311608,
+      "f1-score": 0.6814802922051858,
+      "support": 24550.0
+    },
+    "High": {
+      "precision": 0.6878747988884013,
+      "recall": 0.2698066662842063,
+      "f1-score": 0.3875885940332949,
+      "support": 17431.0
+    },
+    "accuracy": 0.5916636665466619,
+    "macro avg": {
+      "precision": 0.6413632675437521,
+      "recall": 0.5301060840933516,
+      "f1-score": 0.5376650310621115,
+      "support": 49998.0
+    },
+    "weighted avg": {
+      "precision": 0.6240170963789251,
+      "recall": 0.5916636665466619,
+      "f1-score": 0.5569633656812796,
+      "support": 49998.0
+    }
+  },
+  "feature_importances": {
+    "hist_avg_speed": 0.451,
+    "hist_avg_duration": 0.2029,
+    "PULocationID": 0.0905,
+    "pickup_hour": 0.0803,
+    "hist_volume": 0.078,
+    "pickup_day_of_week": 0.0665,
+    "is_weekend": 0.0309
+  }
+}
