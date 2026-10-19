@@ -1,0 +1,12 @@
+# Sample NYC TLC Trip Records for MapReduce & Pipeline Validation
+# Format: LocationID,Speed_mph,Trip_Distance
+161,12.50,2.40
+161,10.00,1.80
+237,18.50,4.20
+237,14.00,3.50
+161,15.00,2.10
+132,26.40,14.80
+132,22.10,13.20
+138,20.50,9.70
+79,11.20,1.90
+79,9.80,1.50

@@ -134,7 +134,54 @@ TrafficPulse/
 
 ---
 
-## 6. How to Reproduce & Run
+## 6. Big Data Infrastructure Management (Hadoop HDFS, Hive, PySpark)
+
+### Port Allocation & Service Matrix
+| Service | Container Name | Host Port | Protocol / Purpose | Memory Limit |
+| :--- | :--- | :--- | :--- | :--- |
+| **HDFS NameNode** | `trafficpulse-namenode` | `9870` | WebHDFS REST API & Storage Web UI | `768 MB` (Heap: 512M) |
+| **HDFS IPC** | `trafficpulse-namenode` | `9000` | Hadoop RPC Filesystem endpoint | - |
+| **YARN ResourceManager** | `trafficpulse-namenode` | `8088` | MapReduce Application Coordinator UI | - |
+| **HDFS DataNode** | `trafficpulse-datanode` | `9864` | Block Storage Worker Web UI | `768 MB` (Heap: 512M) |
+| **Apache HiveServer2** | `trafficpulse-hive-server` | `10000` | Hive JDBC/ODBC & Thrift Server | `768 MB` (Heap: 512M) |
+| **HiveServer2 Web UI** | `trafficpulse-hive-server` | `10002` | Hive Analytical Query Monitor UI | - |
+| **Hive Metastore DB** | `trafficpulse-hive-db` | `5432` | PostgreSQL Relational Schema Catalog | `256 MB` |
+
+### Startup & Shutdown Commands
+```powershell
+# 1. Start Docker Desktop application (via Windows Start Menu or Desktop shortcut)
+
+# 2. Start HDFS Cluster (Conservative footprint: ~1.5 GB RAM)
+docker compose up -d hadoop-master hadoop-worker
+
+# 3. Start Apache Hive Warehouse (adds ~1.0 GB RAM)
+docker compose up -d hive-metastore-db hive-server
+
+# 4. Check Container Health & Status
+docker compose ps
+
+# 5. Stop Cluster and Preserve Storage Volumes
+docker compose down
+
+# 6. Stop and Wipe Clean (Remove Data Volumes)
+docker compose down -v
+```
+
+### Component Validation Commands
+```powershell
+# Validate HDFS Web Interface and Root Directory Listing
+python scripts/validate_hdfs.py
+
+# Validate PySpark Engine & SparkSession
+python scripts/validate_pyspark.py
+
+# Validate MapReduce Streaming Pipeline (Locally or on YARN)
+cat data/sample/sample_trips.csv | python mapreduce/mapper_test.py | sort | python mapreduce/reducer_test.py
+```
+
+---
+
+## 7. How to Reproduce & Run
 
 ### Step 1: Virtual Environment Setup
 ```powershell
