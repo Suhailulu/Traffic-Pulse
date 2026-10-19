@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Large Datasets & Binary Data (TLC Trip records, Big Data extracts)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.parquet
+*.csv.gz
+*.tar.gz
+*.zip
+
+# Keep small sample fixtures and geo lookup metadata
+!data/sample/.gitkeep
+
+# Big Data Cluster & Metastore artifacts
+metastore_db/
+derby.log
+warehouse/
+spark-warehouse/
+hadoop_data/
+hdfs_data/
+
+# Machine Learning Saved Models & Checkpoints
+src/prediction/models/*.joblib
+src/prediction/models/*.pkl
+!src/prediction/models/.gitkeep
+
+# Environment Variables & Local Secrets
+.env
+!.env.example
+
+# IDEs & Operating System Artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & Temporary files
+*.log
+logs/
+.ipynb_checkpoints/

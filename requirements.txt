@@ -1,0 +1,26 @@
+# TrafficPulse - Big Data Analytics & Prediction for Urban Traffic Congestion
+# CCS334 Mini Project Dependencies
+
+# 1. Core Data Ingestion & Tabular Processing
+pandas>=2.2.0
+numpy>=1.26.0
+pyarrow>=15.0.0
+fastparquet>=2024.2.0
+requests>=2.31.0
+
+# 2. Machine Learning & Statistical Modeling
+scikit-learn>=1.4.0
+joblib>=1.3.0
+
+# 3. Interactive Geospatial & Visual Presentation
+streamlit>=1.32.0
+plotly>=5.20.0
+folium>=0.16.0
+streamlit-folium>=0.18.0
+
+# 4. Distributed Processing Engine
+pyspark>=3.5.1
+
+# 5. Testing & Environment Utilities
+pytest>=8.0.0
+python-dotenv>=1.0.0

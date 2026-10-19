@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # ==============================================================================
+  # Hadoop Master: HDFS NameNode + YARN ResourceManager (MapReduce Coordinator)
+  # ==============================================================================
+  hadoop-master:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: trafficpulse-namenode
+    restart: always
+    ports:
+      - "9870:9870"      # HDFS NameNode Web UI
+      - "9000:9000"      # HDFS IPC port
+      - "8088:8088"      # YARN ResourceManager Web UI
+    environment:
+      - CLUSTER_NAME=trafficpulse
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-master:9000
+      - HDFS_CONF_dfs_replication=1
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./data:/opt/trafficpulse/data
+      - ./mapreduce:/opt/trafficpulse/mapreduce
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+
+  # ==============================================================================
+  # Hadoop Worker: HDFS DataNode + YARN NodeManager (MapReduce Execution Task)
+  # ==============================================================================
+  hadoop-worker:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: trafficpulse-datanode
+    restart: always
+    ports:
+      - "9864:9864"      # HDFS DataNode Web UI
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-master:9000
+      - HDFS_CONF_dfs_replication=1
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    depends_on:
+      - hadoop-master
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+
+  # ==============================================================================
+  # Apache Hive: HiveServer2 & Metastore for SQL-on-Hadoop Analytics
+  # ==============================================================================
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: trafficpulse-hive-server
+    restart: always
+    ports:
+      - "10000:10000"    # HiveServer2 JDBC/ODBC Port
+      - "10002:10002"    # HiveServer2 Web UI
+    environment:
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore-db:5432/metastore
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-master:9000
+    depends_on:
+      - hadoop-master
+      - hadoop-worker
+      - hive-metastore-db
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+
+  hive-metastore-db:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+    container_name: trafficpulse-hive-db
+    restart: always
+    environment:
+      - POSTGRES_DB=metastore
+      - POSTGRES_USER=hive
+      - POSTGRES_PASSWORD=hive
+    volumes:
+      - hive_db_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hive_db_data:
