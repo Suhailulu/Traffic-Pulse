@@ -1,0 +1,247 @@
+{
+  "execution_metadata": {
+    "source_parquet": "data\\raw\\yellow_tripdata_2024-01.parquet",
+    "executed_at": "2026-10-19T20:22:48.333490",
+    "processing_duration_seconds": 2.17,
+    "total_raw_records": 2964624,
+    "total_valid_trips": 2887991,
+    "retention_rate_pct": 97.42
+  },
+  "audit_rejections": {
+    "invalid_timestamps": 870,
+    "invalid_durations": 36129,
+    "invalid_distances": 38599,
+    "invalid_speeds": 1035
+  },
+  "traffic_kpis": {
+    "overall_avg_duration_minutes": 14.99,
+    "overall_avg_speed_mph": 11.53,
+    "overall_avg_distance_miles": 3.31,
+    "peak_travel_hour": 18,
+    "peak_hour_trips": 207784,
+    "lowest_travel_hour": 4,
+    "lowest_hour_trips": 15462
+  },
+  "top_pickup_hotspots": [
+    {
+      "PULocationID": 161,
+      "zone_name": "Midtown Center",
+      "borough": "Manhattan",
+      "trip_count": 141243,
+      "avg_duration_minutes": 13.92,
+      "avg_speed_mph": 9.13,
+      "avg_distance_miles": 2.33
+    },
+    {
+      "PULocationID": 237,
+      "zone_name": "Upper East Side South",
+      "borough": "Manhattan",
+      "trip_count": 141002,
+      "avg_duration_minutes": 11.03,
+      "avg_speed_mph": 9.19,
+      "avg_distance_miles": 1.71
+    },
+    {
+      "PULocationID": 132,
+      "zone_name": "JFK Airport",
+      "borough": "Queens",
+      "trip_count": 140160,
+      "avg_duration_minutes": 37.27,
+      "avg_speed_mph": 27.27,
+      "avg_distance_miles": 15.92
+    },
+    {
+      "PULocationID": 236,
+      "zone_name": "Upper East Side North",
+      "borough": "Manhattan",
+      "trip_count": 134533,
+      "avg_duration_minutes": 11.23,
+      "avg_speed_mph": 9.91,
+      "avg_distance_miles": 1.87
+    },
+    {
+      "PULocationID": 162,
+      "zone_name": "Midtown East",
+      "borough": "Manhattan",
+      "trip_count": 105113,
+      "avg_duration_minutes": 13.39,
+      "avg_speed_mph": 9.58,
+      "avg_distance_miles": 2.26
+    }
+  ],
+  "hourly_distribution": [
+    {
+      "hour": 0,
+      "trip_count": 75965,
+      "avg_duration_minutes": 13.79,
+      "avg_speed_mph": 14.61,
+      "avg_distance_miles": 3.88
+    },
+    {
+      "hour": 1,
+      "trip_count": 50897,
+      "avg_duration_minutes": 12.75,
+      "avg_speed_mph": 13.79,
+      "avg_distance_miles": 3.28
+    },
+    {
+      "hour": 2,
+      "trip_count": 35302,
+      "avg_duration_minutes": 12.07,
+      "avg_speed_mph": 13.8,
+      "avg_distance_miles": 3.05
+    },
+    {
+      "hour": 3,
+      "trip_count": 23174,
+      "avg_duration_minutes": 12.24,
+      "avg_speed_mph": 15.18,
+      "avg_distance_miles": 3.54
+    },
+    {
+      "hour": 4,
+      "trip_count": 15462,
+      "avg_duration_minutes": 14.07,
+      "avg_speed_mph": 18.07,
+      "avg_distance_miles": 4.9
+    },
+    {
+      "hour": 5,
+      "trip_count": 17604,
+      "avg_duration_minutes": 16.59,
+      "avg_speed_mph": 19.69,
+      "avg_distance_miles": 6.27
+    },
+    {
+      "hour": 6,
+      "trip_count": 39662,
+      "avg_duration_minutes": 15.76,
+      "avg_speed_mph": 16.03,
+      "avg_distance_miles": 4.74
+    },
+    {
+      "hour": 7,
+      "trip_count": 81165,
+      "avg_duration_minutes": 15.03,
+      "avg_speed_mph": 12.96,
+      "avg_distance_miles": 3.57
+    },
+    {
+      "hour": 8,
+      "trip_count": 113944,
+      "avg_duration_minutes": 15.2,
+      "avg_speed_mph": 11.02,
+      "avg_distance_miles": 3.07
+    },
+    {
+      "hour": 9,
+      "trip_count": 126064,
+      "avg_duration_minutes": 15.15,
+      "avg_speed_mph": 10.99,
+      "avg_distance_miles": 3.06
+    },
+    {
+      "hour": 10,
+      "trip_count": 136046,
+      "avg_duration_minutes": 15.25,
+      "avg_speed_mph": 10.84,
+      "avg_distance_miles": 3.06
+    },
+    {
+      "hour": 11,
+      "trip_count": 147455,
+      "avg_duration_minutes": 15.12,
+      "avg_speed_mph": 10.29,
+      "avg_distance_miles": 2.91
+    },
+    {
+      "hour": 12,
+      "trip_count": 160892,
+      "avg_duration_minutes": 15.13,
+      "avg_speed_mph": 10.33,
+      "avg_distance_miles": 2.99
+    },
+    {
+      "hour": 13,
+      "trip_count": 166301,
+      "avg_duration_minutes": 15.52,
+      "avg_speed_mph": 10.39,
+      "avg_distance_miles": 3.17
+    },
+    {
+      "hour": 14,
+      "trip_count": 178904,
+      "avg_duration_minutes": 16.48,
+      "avg_speed_mph": 10.22,
+      "avg_distance_miles": 3.35
+    },
+    {
+      "hour": 15,
+      "trip_count": 184999,
+      "avg_duration_minutes": 16.81,
+      "avg_speed_mph": 9.92,
+      "avg_distance_miles": 3.29
+    },
+    {
+      "hour": 16,
+      "trip_count": 186007,
+      "avg_duration_minutes": 16.95,
+      "avg_speed_mph": 10.19,
+      "avg_distance_miles": 3.41
+    },
+    {
+      "hour": 17,
+      "trip_count": 201475,
+      "avg_duration_minutes": 15.94,
+      "avg_speed_mph": 9.88,
+      "avg_distance_miles": 3.06
+    },
+    {
+      "hour": 18,
+      "trip_count": 207784,
+      "avg_duration_minutes": 14.39,
+      "avg_speed_mph": 10.37,
+      "avg_distance_miles": 2.87
+    },
+    {
+      "hour": 19,
+      "trip_count": 180009,
+      "avg_duration_minutes": 13.83,
+      "avg_speed_mph": 11.65,
+      "avg_distance_miles": 3.17
+    },
+    {
+      "hour": 20,
+      "trip_count": 156708,
+      "avg_duration_minutes": 13.53,
+      "avg_speed_mph": 12.72,
+      "avg_distance_miles": 3.38
+    },
+    {
+      "hour": 21,
+      "trip_count": 157152,
+      "avg_duration_minutes": 13.52,
+      "avg_speed_mph": 13.21,
+      "avg_distance_miles": 3.47
+    },
+    {
+      "hour": 22,
+      "trip_count": 139438,
+      "avg_duration_minutes": 13.87,
+      "avg_speed_mph": 13.65,
+      "avg_distance_miles": 3.68
+    },
+    {
+      "hour": 23,
+      "trip_count": 105582,
+      "avg_duration_minutes": 14.21,
+      "avg_speed_mph": 14.59,
+      "avg_distance_miles": 4.04
+    }
+  ],
+  "methodology_limitations": [
+    "Taxi trip duration reflects commercial point-to-point transit times rather than continuous highway lane sensor counts.",
+    "Average speeds include boarding/alighting delays, traffic light dwell times, and street grid turns.",
+    "Severe speed drops serve as an empirical indicator of corridor friction rather than vehicle density."
+  ]
+}

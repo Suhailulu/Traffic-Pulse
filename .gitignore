@@ -14,6 +14,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/*.csv
 *.parquet
 *.csv.gz
 *.tar.gz
@@ -21,6 +22,7 @@ data/processed/*
 
 # Keep small sample fixtures and geo lookup metadata
 !data/sample/.gitkeep
+!data/sample/*.csv
 
 # Big Data Cluster & Metastore artifacts
 metastore_db/

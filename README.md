@@ -132,9 +132,40 @@ TrafficPulse/
 └── README.md                # Project documentation and reproduction guide
 ```
 
+## 5. Verified Traffic Analytics Results (January 2024 Records)
+
+Aggregated from all **2,887,991 verified trips** using memory-safe PyArrow streaming batches:
+
+- **Total Analyzed Trips:** `2,887,991` (97.42% retention)
+- **Peak Travel Hour:** **Hour 18:00 (6:00 PM)** with `207,784 trips`
+- **Lowest Travel Hour:** **Hour 04:00 (4:00 AM)** with `15,462 trips`
+- **Overall Mean Trip Duration:** `14.99 minutes`
+- **Overall Estimated Average Speed:** `11.53 mph`
+- **Overall Mean Trip Distance:** `3.31 miles`
+
+### Top 5 High-Demand Pickup Zones
+| Rank | Zone ID | Zone Name | Borough | Trip Volume | Avg Speed (mph) | Avg Duration |
+| :---: | :---: | :--- | :--- | :---: | :---: | :---: |
+| 1 | `161` | **Midtown Center** | Manhattan | `141,243` | `9.13 mph` | 13.92 min |
+| 2 | `237` | **Upper East Side South** | Manhattan | `141,002` | `9.19 mph` | 11.03 min |
+| 3 | `132` | **JFK Airport** | Queens | `140,160` | `27.27 mph` | 37.27 min |
+| 4 | `236` | **Upper East Side North** | Manhattan | `134,533` | `9.91 mph` | 11.23 min |
+| 5 | `162` | **Midtown East** | Manhattan | `105,113` | `9.58 mph` | 13.06 min |
+
+### Key Diurnal Observations
+- **Free-flow Velocity Window:** 04:00 – 06:00 AM exhibits the highest average urban speeds (`18.07 - 19.69 mph`).
+- **Evening Peak Friction:** 03:00 – 06:00 PM exhibits the lowest urban speeds (`9.88 - 10.37 mph`) paired with peak passenger demand (> 200,000 trips/hr).
+
 ---
 
-## 6. Big Data Infrastructure Management (Hadoop HDFS, Hive, PySpark)
+## 6. Analytical Output Artifacts
+- **Hourly Traffic Summary:** [data/processed/hourly_traffic_summary.csv](file:///c:/Users/suhai/OneDrive/Desktop/Traffic%20Pulse/data/processed/hourly_traffic_summary.csv)
+- **Zone Traffic Summary:** [data/processed/zone_traffic_summary.csv](file:///c:/Users/suhai/OneDrive/Desktop/Traffic%20Pulse/data/processed/zone_traffic_summary.csv)
+- **Executive JSON Report:** [reports/traffic_analysis_report.json](file:///c:/Users/suhai/OneDrive/Desktop/Traffic%20Pulse/reports/traffic_analysis_report.json)
+
+---
+
+## 7. How to Reproduce & Run
 
 ### Port Allocation & Service Matrix
 | Service | Container Name | Host Port | Protocol / Purpose | Memory Limit |
