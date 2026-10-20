@@ -4,7 +4,7 @@
 - **GeoJSON Boundaries:** `data\raw\taxi_zones.geojson` (263 polygon features)
 - **Identified GeoJSON Join Key:** `locationid`
 - **Lookup LocationID Range:** `1` to `265`
-- **Inspection Timestamp:** `2026-10-19T19:16:59.296690`
+- **Inspection Timestamp:** `2026-10-20T16:25:03.754362`
 
 ---
 
